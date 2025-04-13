@@ -1,4 +1,6 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_file
+import qrcode
+from io import BytesIO
 
 app = Flask(__name__)
 
@@ -23,6 +25,30 @@ def calculate():
         })
     except ValueError:
         return jsonify({'error': 'Please enter a valid weight in kilograms'}), 400
+
+@app.route('/qr')
+def generate_qr():
+    # Create QR code instance
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_L,
+        box_size=10,
+        border=4,
+    )
+    
+    # Add the data
+    qr.add_data('https://protein-calculator-1.onrender.com/')
+    qr.make(fit=True)
+
+    # Create an image from the QR Code
+    img = qr.make_image(fill_color="black", back_color="white")
+    
+    # Save the image to a bytes buffer
+    img_buffer = BytesIO()
+    img.save(img_buffer, format='PNG')
+    img_buffer.seek(0)
+    
+    return send_file(img_buffer, mimetype='image/png')
 
 if __name__ == '__main__':
     app.run(debug=True) 

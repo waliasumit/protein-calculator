@@ -28,6 +28,14 @@
             color: #dc3545;
             display: none;
         }
+        .qr-code {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .qr-code img {
+            max-width: 200px;
+            margin: 10px auto;
+        }
     </style>
 </head>
 <body>
@@ -43,6 +51,11 @@
             </form>
             <div class="alert alert-success result" role="alert"></div>
             <div class="alert alert-danger error" role="alert"></div>
+            
+            <div class="qr-code">
+                <p class="text-muted">Scan to share:</p>
+                <img src="/qr" alt="QR Code" class="img-fluid">
+            </div>
         </div>
     </div>
 
