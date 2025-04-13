@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, send_file
 import qrcode
 from io import BytesIO
+import base64
 
 app = Flask(__name__)
 
@@ -48,7 +49,10 @@ def generate_qr():
     img.save(img_buffer, format='PNG')
     img_buffer.seek(0)
     
-    return send_file(img_buffer, mimetype='image/png')
+    # Convert to base64 for embedding in HTML
+    img_str = base64.b64encode(img_buffer.getvalue()).decode('utf-8')
+    
+    return jsonify({'qr_code': f'data:image/png;base64,{img_str}'})
 
 if __name__ == '__main__':
     app.run(debug=True) 

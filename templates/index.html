@@ -54,12 +54,23 @@
             
             <div class="qr-code">
                 <p class="text-muted">Scan to share:</p>
-                <img src="/qr" alt="QR Code" class="img-fluid">
+                <img id="qrCode" alt="QR Code" class="img-fluid">
             </div>
         </div>
     </div>
 
     <script>
+        // Load QR code when page loads
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const response = await fetch('/qr');
+                const data = await response.json();
+                document.getElementById('qrCode').src = data.qr_code;
+            } catch (error) {
+                console.error('Error loading QR code:', error);
+            }
+        });
+
         document.getElementById('proteinForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const weight = document.getElementById('weight').value;
